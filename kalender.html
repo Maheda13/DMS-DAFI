@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Kegiatan SMP DAFI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
+        :root {
+            --font-family: 'Roboto', 'Poppins', sans-serif; --background-color: #F9FAFB; --border-color: #E5E7EB;
+            --text-color: #374151; --text-color-light: #6B7280; --primary-color: #3B82F6;
+            --primary-hover: #2563EB; --color-kurikulum: #FEF3C7; --color-kurikulum-text: #92400E;
+            --color-tahfidz: #CFFAFE; --color-tahfidz-text: #0E7490; --color-kesiswaan: #FFE4E6;
+            --color-kesiswaan-text: #BE185D; --color-humas: #E0E7FF; --color-humas-text: #4338CA;
+            --color-sarana: #F3E8FF; --color-sarana-text: #7E22CE;
+        }
+        body { font-family: var(--font-family); background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 24px; }
+        .container { width: 100%; max-width: 1500px; margin: 0 auto; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 8px; }
+        .calendar-header .month-display { display: flex; align-items: center; gap: 20px; }
+        .calendar-header h1 { font-size: 1.75rem; font-weight: 500; color: var(--text-color); margin: 0; }
+        .nav-buttons { display: flex; align-items: center; gap: 8px; }
+        .nav-buttons .icon-btn, .today-btn, .nav-btn {
+            background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px;
+            cursor: pointer; transition: all 0.2s ease; font-family: var(--font-family); font-size: 0.9rem; font-weight: 500; text-decoration: none; color: var(--text-color);
+        }
+        .nav-buttons .icon-btn { padding: 8px; line-height: 0; }
+        .nav-buttons .icon-btn:hover, .today-btn:hover, .nav-btn:hover { background-color: #F3F4F6; }
+        .main-wrapper { display: flex; gap: 30px; }
+        .sidebar { width: 320px; flex-shrink: 0; }
+        .details-section, .division-legend { background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+        .sidebar h3 { margin-top: 0; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; }
+        #details-content p { margin: 12px 0; word-wrap: break-word; line-height: 1.6; color: var(--text-color-light); }
+        #details-content strong { color: var(--text-color); font-weight: 500; display: block; margin-bottom: 4px; }
+        .placeholder { color: var(--text-color-light); font-style: italic; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
+        .legend-color { width: 18px; height: 18px; border-radius: 4px; margin-right: 12px; }
+        .calendar-grid-container { flex-grow: 1; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-radius: 12px; overflow: hidden; background-color: #fff; border: 1px solid var(--border-color); }
+        .calendar-header-row { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .day-name { text-align: center; font-weight: 500; font-size: 0.8rem; padding: 12px 0; background-color: #fff; color: var(--text-color-light); border-bottom: 1px solid var(--border-color); }
+        .day { min-height: 130px; position: relative; background-color: #fff; padding: 8px; border-right: 1px solid var(--border-color); border-top: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .day:nth-child(7n+1) { border-left: none; } .day:nth-child(7n) { border-right: none; }
+        .day.other-month .day-number { color: #ADB5BD; }
+        .day-number { font-size: 0.9rem; text-align: center; margin-bottom: 6px; width: 28px; height: 28px; line-height: 28px; align-self: flex-end; }
+        .day.today .day-number { background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: 500; }
+        .events-container { flex-grow: 1; position: relative; }
+        .event {
+            font-size: 0.8rem; font-weight: 500; padding: 2px 10px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; cursor: pointer; transition: filter 0.2s; border: 1px solid rgba(0,0,0,0.05); position: absolute; left: 1px; z-index: 1;
+        }
+        .event:hover { filter: brightness(95%); }
+        .event.selected { box-shadow: 0 0 0 2px var(--primary-color) inset; z-index: 2; }
+        .event-start { border-radius: 6px 0 0 6px; width: calc(100% + 8px); }
+        .event-middle { border-radius: 0; width: calc(100% + 9px); left: 0; }
+        .event-end { border-radius: 0 6px 6px 0; width: 100%; }
+        .event-single { border-radius: 6px; width: calc(100% - 2px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="calendar-header">
+            <div class="month-display">
+                <a href="index.html"><img src="https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/2x/logo_calendar_31_2x.png" alt="Calendar Icon" width="40" height="40"></a>
+                <h1></h1>
+            </div>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">← Homepage</a>
+                <button class="today-btn">Hari Ini</button>
+                <button class="icon-btn" id="prev-month" aria-label="Bulan Sebelumnya"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <button class="icon-btn" id="next-month" aria-label="Bulan Berikutnya"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+            </div>
+        </header>
+        <main class="main-wrapper">
+            <aside class="sidebar">
+                 <div class="details-section">
+                    <h3>Detail Kegiatan</h3>
+                    <div id="details-content"><p class="placeholder">Pilih sebuah agenda untuk melihat detailnya di sini.</p></div>
+                </div>
+                <div class="division-legend">
+                    <h3>Divisi</h3>
+                    <div class="legend-item"><div class="legend-color" style="background-color: var(--color-kurikulum);"></div><span>Kurikulum</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: var(--color-tahfidz);"></div><span>Tahfidz</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: var(--color-kesiswaan);"></div><span>Kesiswaan</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: var(--color-humas);"></div><span>Humas</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background-color: var(--color-sarana);"></div><span>Sarana Prasarana</span></div>
+                </div>
+            </aside>
+            <section class="calendar-grid-container">
+                <div class="calendar-header-row">
+                    <div class="day-name">MIN</div><div class="day-name">SEN</div><div class="day-name">SEL</div><div class="day-name">RAB</div><div class="day-name">KAM</div><div class="day-name">JUM</div><div class="day-name">SAB</div>
+                </div>
+                <div class="calendar-grid" id="calendar-body"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const monthYearEl = document.querySelector('.calendar-header h1');
+            const calendarBody = document.getElementById('calendar-body');
+            const detailsContent = document.getElementById('details-content');
+            let currentDate = new Date();
+            let selectedEventId = null;
+            const divisionColors = {
+                kurikulum: {bg: 'var(--color-kurikulum)', text: 'var(--color-kurikulum-text)'}, tahfidz: {bg: 'var(--color-tahfidz)', text: 'var(--color-tahfidz-text)'},
+                kesiswaan: {bg: 'var(--color-kesiswaan)', text: 'var(--color-kesiswaan-text)'}, humas: {bg: 'var(--color-humas)', text: 'var(--color-humas-text)'},
+                sarana: {bg: 'var(--color-sarana)', text: 'var(--color-sarana-text)'}
+            };
+            
+            async function getEvents() {
+                // ↓↓↓ PENTING: GANTI DENGAN LINK .CSV DARI GOOGLE SHEET ANDA ↓↓↓
+                const sheetURL = 'LINK_CSV_ANDA_DI_SINI';
+                // ↑↑↑ PENTING: GANTI DENGAN LINK .CSV DARI GOOGLE SHEET ANDA ↑↑↑
+
+                if (sheetURL === 'LINK_CSV_ANDA_DI_SINI' || !sheetURL) {
+                    console.warn("URL Google Sheet belum dimasukkan. Menampilkan data contoh.");
+                    return [{ id: 1, name: 'Contoh: Konfigurasi URL Google Sheet', startDate: '2025-10-01', endDate: '2025-10-02', division: 'humas', details: 'Buka file kalender.html dan ganti LINK_CSV_ANDA_DI_SINI dengan link .csv dari Google Sheet Anda.' }];
+                }
+                
+                try {
+                    const response = await fetch(sheetURL);
+                    if (!response.ok) throw new Error('Gagal mengambil data. Pastikan link benar dan dipublikasikan.');
+                    const csvText = await response.text();
+                    const lines = csvText.split(/\r\n|\n/);
+                    const headers = lines[0].split(',');
+                    return lines.slice(1).map(line => {
+                        if (!line) return null;
+                        const data = line.split(',');
+                        const eventObj = {};
+                        headers.forEach((header, index) => eventObj[header.trim()] = data[index].trim());
+                        return eventObj;
+                    }).filter(Boolean);
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Tidak dapat memuat data kalender. Periksa konsol untuk detail error.");
+                    return [];
+                }
+            }
+
+            async function renderCalendar() {
+                const events = await getEvents();
+                calendarBody.innerHTML = '';
+                const year = currentDate.getFullYear(); const month = currentDate.getMonth();
+                monthYearEl.textContent = `${currentDate.toLocaleString('id-ID', { month: 'long', year: 'numeric' })}`;
+                const firstDayOfMonth = new Date(year, month, 1);
+                const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+                const firstDayIndex = firstDayOfMonth.getDay();
+                const eventLayout = calculateEventLayout(events, year, month);
+                let dayCounter = 1;
+                const totalCells = (firstDayIndex + lastDateOfMonth) <= 35 ? 35 : 42;
+                for (let i = 0; i < totalCells; i++) {
+                    if (i < firstDayIndex || dayCounter > lastDateOfMonth) {
+                        const emptyDayEl = document.createElement('div');
+                        emptyDayEl.classList.add('day', 'other-month');
+                        calendarBody.appendChild(emptyDayEl); continue;
+                    }
+                    const dayDate = new Date(year, month, dayCounter);
+                    const dayEl = document.createElement('div'); dayEl.classList.add('day');
+                    const dayNumberEl = document.createElement('div'); dayNumberEl.classList.add('day-number');
+                    dayNumberEl.textContent = dayCounter;
+                    const today = new Date();
+                    if (dayCounter === today.getDate() && month === today.getMonth() && year === today.getFullYear()) { dayEl.classList.add('today'); }
+                    const eventsContainer = document.createElement('div'); eventsContainer.classList.add('events-container');
+                    if (eventLayout[dayCounter]) {
+                        eventLayout[dayCounter].forEach(eventMeta => {
+                            const event = eventMeta.event; const eventEl = document.createElement('div'); eventEl.classList.add('event');
+                            eventEl.style.top = `${eventMeta.lane * 24}px`;
+                            const colors = divisionColors[event.division]; eventEl.style.backgroundColor = colors.bg; eventEl.style.color = colors.text;
+                            if(event.id == selectedEventId) eventEl.classList.add('selected');
+                            const isStartOfWeek = dayDate.getDay() === 0; const isEndOfWeek = dayDate.getDay() === 6;
+                            const isActualStart = eventMeta.isStart; const isActualEnd = eventMeta.isEnd;
+                            if (isActualStart || isStartOfWeek) { eventEl.textContent = event.name; } else { eventEl.innerHTML = '&nbsp;'; }
+                            if (isActualStart && isActualEnd) { eventEl.classList.add('event-single'); }
+                            else if (isActualStart || isStartOfWeek) { eventEl.classList.add('event-start'); }
+                            else if (isActualEnd || isEndOfWeek) { eventEl.classList.add('event-end'); }
+                            else { eventEl.classList.add('event-middle'); }
+                            eventEl.addEventListener('click', (e) => { e.stopPropagation(); selectedEventId = event.id; showDetails(event); renderCalendar(); });
+                            eventsContainer.appendChild(eventEl);
+                        });
+                    }
+                    dayEl.appendChild(dayNumberEl); dayEl.appendChild(eventsContainer);
+                    calendarBody.appendChild(dayEl); dayCounter++;
+                }
+            }
+            function calculateEventLayout(events, year, month) {
+                const layout = {};
+                const sortedEvents = events.sort((a,b) => (new Date(a.startDate) - new Date(b.startDate)));
+                sortedEvents.forEach(event => {
+                    const startDate = new Date(event.startDate + 'T00:00:00'); const endDate = new Date(event.endDate + 'T00:00:00'); let currentLane = 0;
+                    while (true) {
+                        let laneIsFree = true; let d = new Date(startDate);
+                        while (d <= endDate) {
+                            if (d.getMonth() === month && d.getFullYear() === year) {
+                                const day = d.getDate();
+                                if (layout[day] && layout[day].some(e => e.lane === currentLane)) { laneIsFree = false; break; }
+                            }
+                            d.setDate(d.getDate() + 1);
+                        }
+                        if (laneIsFree) break; currentLane++;
+                    }
+                    let d = new Date(startDate);
+                    while (d <= endDate) {
+                        if (d.getMonth() === month && d.getFullYear() === year) {
+                            const day = d.getDate(); if (!layout[day]) layout[day] = [];
+                            layout[day].push({ event, lane: currentLane, isStart: d.getTime() === startDate.getTime(), isEnd: d.getTime() === endDate.getTime() });
+                        }
+                        d.setDate(d.getDate() + 1);
+                    }
+                }); return layout;
+            }
+            function showDetails(event) {
+                const formatDate = (dateString) => new Date(dateString + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                let waktuText = formatDate(event.startDate);
+                if (event.startDate !== event.endDate) waktuText += ` - ${formatDate(event.endDate)}`;
+                detailsContent.innerHTML = `<p><strong>${event.name}</strong></p><p><strong>Waktu Pelaksanaan</strong>${waktuText}</p><p><strong>Divisi Penanggung Jawab</strong><span style="text-transform: capitalize;">${event.division}</span></p><p><strong>Detail Tambahan</strong>${event.details || 'Tidak ada detail.'}</p>`;
+            }
+            
+            document.getElementById('prev-month').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+            document.getElementById('next-month').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+            document.querySelector('.today-btn').addEventListener('click', () => { currentDate = new Date(); renderCalendar(); });
+            window.addEventListener('focus', () => renderCalendar());
+            renderCalendar();
+        });
+    </script>
+</body>
+</html>
