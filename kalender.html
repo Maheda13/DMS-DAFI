@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalender Kegiatan SMP DAFI</title>
+    <title>Kalender Kegiatan - DMS DAFI</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
         :root {
@@ -61,7 +61,7 @@
     <div class="container">
         <header class="calendar-header">
             <div class="month-display">
-                <a href="index.html"><img src="https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/2x/logo_calendar_31_2x.png" alt="Calendar Icon" width="40" height="40"></a>
+                <a href="index.html"><img src="dafi.png" alt="Logo SMP DAFI" width="40" height="40" style="object-fit: contain;"></a>
                 <h1></h1>
             </div>
             <div class="nav-buttons">
@@ -109,14 +109,7 @@
             };
             
             async function getEvents() {
-                // ↓↓↓ PENTING: GANTI DENGAN LINK .CSV DARI GOOGLE SHEET ANDA ↓↓↓
                 const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtwphJmH3rXHRlAuU2_IiA23zJuaVKYiuWva20kEesKQdhhtprE4hF8aQFZ3v0OmvZofLLcbQ-HikD/pub?gid=1223259670&single=true&output=csv';
-                // ↑↑↑ PENTING: GANTI DENGAN LINK .CSV DARI GOOGLE SHEET ANDA ↑↑↑
-
-                if (sheetURL === 'LINK_CSV_ANDA_DI_SINI' || !sheetURL) {
-                    console.warn("URL Google Sheet belum dimasukkan. Menampilkan data contoh.");
-                    return [{ id: 1, name: 'Contoh: Konfigurasi URL Google Sheet', startDate: '2025-10-01', endDate: '2025-10-02', division: 'humas', details: 'Buka file kalender.html dan ganti LINK_CSV_ANDA_DI_SINI dengan link .csv dari Google Sheet Anda.' }];
-                }
                 
                 try {
                     const response = await fetch(sheetURL);
