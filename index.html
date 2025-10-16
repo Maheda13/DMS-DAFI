@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMS DAFI - Document Management System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #4A90E2; --background-color: #F4F7FC; --card-background: #FFFFFF;
+            --text-color: #333; --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 10px; }
+        .header p { font-size: 1.1rem; color: #666; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card {
+            background-color: var(--card-background); border-radius: 12px; box-shadow: var(--shadow);
+            text-decoration: none; color: var(--text-color); padding: 25px; display: flex;
+            flex-direction: column; align-items: center; text-align: center;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); }
+        .card-icon { font-size: 3rem; margin-bottom: 15px; }
+        .card h3 { margin: 0 0 10px 0; font-size: 1.25rem; font-weight: 600; }
+        .card p { margin: 0; font-size: 0.9rem; color: #777; flex-grow: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>DMS - DAFI</h1>
+            <p>Document Management System - SMP DAFI</p>
+        </header>
+
+        <main class="card-grid">
+            <a href="kalender.html" class="card">
+                <div class="card-icon">🗓️</div>
+                <h3>Kalender Agenda</h3>
+                <p>Lihat semua jadwal kegiatan bulanan sekolah dari data terpusat.</p>
+            </a>
+            <a href="prestasi-guru.html" class="card">
+                <div class="card-icon">🏆</div>
+                <h3>Prestasi Guru</h3>
+                <p>Arsip pencapaian dan prestasi yang diraih oleh para guru.</p>
+            </a>
+            <a href="sop.html" class="card">
+                <div class="card-icon">📜</div>
+                <h3>Kumpulan SOP</h3>
+                <p>Dokumen Standar Operasional Prosedur (SOP) sekolah.</p>
+            </a>
+            <a href="perangkat-ajar.html" class="card">
+                <div class="card-icon">📚</div>
+                <h3>Perangkat Mengajar</h3>
+                <p>Kumpulan materi dan perangkat pendukung proses belajar mengajar.</p>
+            </a>
+            <a href="rekap-prestasi.html" class="card">
+                <div class="card-icon">🏅</div>
+                <h3>Rekap Prestasi Siswa</h3>
+                <p>Catatan prestasi akademik dan non-akademik per siswa.</p>
+            </a>
+            <a href="rekap-permasalahan.html" class="card">
+                <div class="card-icon">⚠️</div>
+                <h3>Rekap Permasalahan Siswa</h3>
+                <p>Catatan dan tindak lanjut permasalahan yang dihadapi siswa.</p>
+            </a>
+            <a href="jadwal-konseling.html" class="card">
+                <div class="card-icon">💬</div>
+                <h3>Jadwal Konseling</h3>
+                <p>Jadwal dan hasil sesi konseling bersama siswa.</p>
+            </a>
+            <a href="pemetaan-siswa.html" class="card">
+                <div class="card-icon">🗺️</div>
+                <h3>Pemetaan Siswa</h3>
+                <p>Analisis dan pemetaan potensi serta kebutuhan siswa.</p>
+            </a>
+        </main>
+    </div>
+</body>
+</html>
