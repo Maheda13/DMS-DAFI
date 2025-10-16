@@ -3,40 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kumpulan SOP</title>
+    <title>Kumpulan SOP - DMS DAFI</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #F4F7FC; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); }
-        h1 { color: #4A90E2; }
-        .back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; background-color: #4A90E2; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 500; transition: background-color 0.2s; }
-        .back-link:hover { background-color: #357ABD; }
-        .sop-list { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .sop-item { display: flex; align-items: center; background-color: #f8f9fa; padding: 15px 20px; border-radius: 8px; text-decoration: none; color: #333; font-weight: 500; transition: background-color 0.2s, box-shadow 0.2s; border: 1px solid #e0e0e0; }
-        .sop-item:hover { background-color: #e9ecef; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .sop-item .icon { font-size: 1.5rem; margin-right: 15px; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+        :root {
+            --primary-color: #4A90E2; --background-color: #F4F7FC; --border-color: #DEE2E6;
+            --text-color: #333; --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        .header {
+            background-color: #fff; padding: 15px 30px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 20px; flex-shrink: 0;
+        }
+        .header h1 { color: var(--primary-color); font-size: 1.5rem; margin: 0; }
+        .back-link { text-decoration: none; color: var(--text-color); font-weight: 500; transition: color 0.2s; }
+        .back-link:hover { color: var(--primary-color); }
+        .main-container { display: flex; flex-grow: 1; overflow: hidden; }
+        .sidebar {
+            width: 350px; background-color: #fff; border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column; flex-shrink: 0;
+        }
+        .search-container { padding: 15px; border-bottom: 1px solid var(--border-color); }
+        #search-input {
+            width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);
+            font-size: 1rem; box-sizing: border-box;
+        }
+        .doc-list-container { list-style: none; margin: 0; padding: 10px 0; overflow-y: auto; }
+        .doc-list-container li {
+            padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s; font-weight: 500;
+        }
+        .doc-list-container li:hover { background-color: #f8f9fa; }
+        .doc-list-container li.active { background-color: #e9f2ff; color: var(--primary-color); }
+        .viewer-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; background-color: #e9ecef; }
+        #pdf-viewer { width: 100%; height: 100%; border: none; }
+        .placeholder { text-align: center; color: #6c757d; }
+        .placeholder-icon { font-size: 4rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Kembali ke Homepage</a>
-        <h1>Daftar Standar Operasional Prosedur (SOP)</h1>
-        <p>Silakan klik pada judul SOP di bawah ini untuk melihat dokumen dalam format PDF di tab baru.</p>
-        
-        <div class="sop-list">
-            <a href="https://drive.google.com/file/d/1_p-A9COc9xKOTcSlvAYsqboI_YyTI2B6/view?usp=sharing" class="sop-item" target="_blank">
-                <span class="icon">📄</span>
-                <span class="title">SOP Penerimaan Siswa Baru</span>
-            </a>
-            <a href="LINK_DARI_GOOGLE_DRIVE_2" class="sop-item" target="_blank">
-                <span class="icon">📄</span>
-                <span class="title">SOP Kegiatan Belajar Mengajar</span>
-            </a>
-            <a href="LINK_DARI_GOOGLE_DRIVE_3" class="sop-item" target="_blank">
-                <span class="icon">📄</span>
-                <span class="title">SOP Penggunaan Laboratorium</span>
-            </a>
+    <header class="header">
+        <a href="index.html" class="back-link">← Homepage</a>
+        <h1>Kumpulan SOP</h1>
+    </header>
+
+    <main class="main-container">
+        <aside class="sidebar">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Cari dokumen...">
             </div>
-    </div>
+            <ul class="doc-list-container" id="doc-list">
+                </ul>
+        </aside>
+
+        <section class="viewer-container" id="viewer-container">
+            <div class="placeholder" id="viewer-placeholder">
+                <div class="placeholder-icon">📂</div>
+                <h2>Pilih Dokumen</h2>
+                <p>Silakan pilih dokumen dari daftar di sebelah kiri untuk menampilkannya di sini.</p>
+            </div>
+            <iframe id="pdf-viewer" title="PDF Viewer"></iframe>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ==========================================================
+            // === 1. MASUKKAN DATA DOKUMEN ANDA DI BAGIAN INI ===
+            // ==========================================================
+            const documents = [
+                {
+                    title: "SOP Penerimaan Siswa Baru",
+                    embedLink: "https://docs.google.com/document/d/1FH-FcqoA9hwDXytBpq-dauB99xbgs92r/preview",
+                    tags: ["ppdb", "siswa baru", "pendaftaran", "kesiswaan"]
+                },
+                {
+                    title: "SOP Kegiatan Belajar Mengajar",
+                    embedLink: "LINK_EMBED_ANDA_DI_SINI_2",
+                    tags: ["kbm", "kurikulum", "akademik", "guru"]
+                },
+                {
+                    title: "SOP Penggunaan Laboratorium",
+                    embedLink: "LINK_EMBED_ANDA_DI_SINI_3",
+                    tags: ["lab", "sarana", "praktikum"]
+                },
+                // Tambahkan dokumen lainnya di sini
+            ];
+            // ==========================================================
+
+            const searchInput = document.getElementById('search-input');
+            const docList = document.getElementById('doc-list');
+            const pdfViewer = document.getElementById('pdf-viewer');
+            const viewerPlaceholder = document.getElementById('viewer-placeholder');
+
+            function renderList(docsToRender) {
+                docList.innerHTML = ''; // Kosongkan daftar
+                if (docsToRender.length === 0) {
+                    docList.innerHTML = '<li style="text-align:center; color:#777; cursor:default;">Dokumen tidak ditemukan.</li>';
+                    return;
+                }
+                docsToRender.forEach(doc => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = doc.title;
+                    listItem.dataset.link = doc.embedLink;
+                    docList.appendChild(listItem);
+                });
+            }
+
+            // Tampilkan daftar awal
+            renderList(documents);
+
+            // Fungsi untuk menampilkan PDF
+            docList.addEventListener('click', function(e) {
+                if (e.target && e.target.nodeName === 'LI' && e.target.dataset.link) {
+                    const link = e.target.dataset.link;
+                    
+                    // Sembunyikan placeholder, tampilkan iframe
+                    viewerPlaceholder.style.display = 'none';
+                    pdfViewer.style.display = 'block';
+                    pdfViewer.src = link;
+
+                    // Tandai item yang aktif
+                    document.querySelectorAll('.doc-list-container li').forEach(li => li.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            // Fungsi untuk pencarian
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredDocs = documents.filter(doc => {
+                    const titleMatch = doc.title.toLowerCase().includes(searchTerm);
+                    const tagsMatch = doc.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                    return titleMatch || tagsMatch;
+                });
+                renderList(filteredDocs);
+            });
+        });
+    </script>
 </body>
 </html>
