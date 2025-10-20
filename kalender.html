@@ -7,54 +7,138 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
         :root {
-            --font-family: 'Roboto', 'Poppins', sans-serif; --background-color: #F9FAFB; --border-color: #E5E7EB;
-            --text-color: #374151; --text-color-light: #6B7280; --primary-color: #3B82F6;
-            --primary-hover: #2563EB; --color-kurikulum: #FEF3C7; --color-kurikulum-text: #92400E;
-            --color-tahfidz: #CFFAFE; --color-tahfidz-text: #0E7490; --color-kesiswaan: #FFE4E6;
-            --color-kesiswaan-text: #BE185D; --color-humas: #E0E7FF; --color-humas-text: #4338CA;
+            --font-family: 'Roboto', 'Poppins', sans-serif; 
+            --background-color: #F9FAFB; --border-color: #E5E7EB;
+            --text-color: #374151; --text-color-light: #6B7280;
+            --primary-color: #DC2626; --primary-hover: #B91C1C;
+            --color-kurikulum: #FEF3C7; --color-kurikulum-text: #92400E;
+            --color-tahfidz: #CFFAFE; --color-tahfidz-text: #0E7490; 
+            --color-kesiswaan: #FFE4E6; --color-kesiswaan-text: #BE185D; 
+            --color-humas: #E0E7FF; --color-humas-text: #4338CA;
             --color-sarana: #F3E8FF; --color-sarana-text: #7E22CE;
         }
-        body { font-family: var(--font-family); background-color: var(--background-color); color: var(--text-color); margin: 0; padding: 24px; }
-        .container { width: 100%; max-width: 1500px; margin: 0 auto; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 0 8px; }
+
+        /* === PERUBAHAN TATA LETAK UTAMA === */
+        html { height: 100%; }
+        body { 
+            font-family: var(--font-family); background-color: var(--background-color); color: var(--text-color); 
+            margin: 0; padding: 20px; /* Padding sedikit dikurangi */
+            height: 100vh; /* 1. Buat body mengisi seluruh tinggi layar */
+            display: flex; flex-direction: column; /* 2. Atur sebagai flex column */
+            overflow: hidden; /* 3. Cegah body utama scrolling */
+            box-sizing: border-box;
+        }
+        .container { 
+            width: 100%; max-width: 1500px; margin: 0 auto; 
+            display: flex; flex-direction: column; /* 4. Buat container mengisi space */
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        /* ================================ */
+
+        .calendar-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; padding: 0 8px; flex-wrap: wrap; gap: 15px;
+            flex-shrink: 0; /* Header tidak boleh menyusut */
+        }
         .calendar-header .month-display { display: flex; align-items: center; gap: 20px; }
-        .calendar-header h1 { font-size: 1.75rem; font-weight: 500; color: var(--text-color); margin: 0; }
-        .nav-buttons { display: flex; align-items: center; gap: 8px; }
+        .calendar-header h1 { font-size: 1.75rem; font-weight: 500; color: var(--primary-color); margin: 0; }
+        .nav-buttons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .nav-buttons .icon-btn, .today-btn, .nav-btn {
             background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px;
             cursor: pointer; transition: all 0.2s ease; font-family: var(--font-family); font-size: 0.9rem; font-weight: 500; text-decoration: none; color: var(--text-color);
         }
         .nav-buttons .icon-btn { padding: 8px; line-height: 0; }
         .nav-buttons .icon-btn:hover, .today-btn:hover, .nav-btn:hover { background-color: #F3F4F6; }
-        .main-wrapper { display: flex; gap: 30px; }
-        .sidebar { width: 320px; flex-shrink: 0; }
-        .details-section, .division-legend { background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+        
+        /* === PERUBAHAN TATA LETAK UTAMA === */
+        .main-wrapper { 
+            display: flex; gap: 30px; 
+            flex-grow: 1; /* 5. Buat wrapper utama mengisi sisa space */
+            overflow: hidden; /* 6. Cegah wrapper scrolling */
+        }
+        .sidebar { 
+            width: 320px; flex-shrink: 0; 
+            overflow-y: auto; /* 7. Sidebar akan scroll jika kontennya panjang */
+            padding-right: 10px; /* Beri sedikit padding untuk scrollbar */
+        }
+        /* ================================ */
+
+        .details-section, .division-legend { background-color: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .sidebar h3 { margin-top: 0; font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; }
         #details-content p { margin: 12px 0; word-wrap: break-word; line-height: 1.6; color: var(--text-color-light); }
         #details-content strong { color: var(--text-color); font-weight: 500; display: block; margin-bottom: 4px; }
         .placeholder { color: var(--text-color-light); font-style: italic; }
         .legend-item { display: flex; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
         .legend-color { width: 18px; height: 18px; border-radius: 4px; margin-right: 12px; }
-        .calendar-grid-container { flex-grow: 1; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-radius: 12px; overflow: hidden; background-color: #fff; border: 1px solid var(--border-color); }
-        .calendar-header-row { display: grid; grid-template-columns: repeat(7, 1fr); }
-        .day-name { text-align: center; font-weight: 500; font-size: 0.8rem; padding: 12px 0; background-color: #fff; color: var(--text-color-light); border-bottom: 1px solid var(--border-color); }
-        .day { min-height: 130px; position: relative; background-color: #fff; padding: 8px; border-right: 1px solid var(--border-color); border-top: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        
+        /* === PERUBAHAN TATA LETAK KALENDER === */
+        .calendar-grid-container { 
+            flex-grow: 1; 
+            display: flex; flex-direction: column; /* 8. Buat kontainer kalender mengisi */
+            overflow: hidden;
+        }
+        .calendar-grid { 
+            display: grid; grid-template-columns: repeat(7, 1fr); 
+            border-radius: 12px; overflow: hidden; background-color: #fff; 
+            border: 1px solid var(--border-color); 
+        }
+        .calendar-header-row { display: grid; grid-template-columns: repeat(7, 1fr); flex-shrink: 0; }
+        .calendar-grid#calendar-body {
+            flex-grow: 1; /* 9. Buat grid hari mengisi sisa tinggi */
+        }
+        /* =================================== */
+        
+        .day-name { text-align: center; font-weight: 500; font-size: 0.8rem; padding: 10px 0; background-color: #fff; color: var(--text-color-light); border-bottom: 1px solid var(--border-color); }
+        .day { 
+            /* min-height: 130px; */ /* <-- 10. HAPUS min-height agar fleksibel */
+            position: relative; background-color: #fff; padding: 8px; 
+            border-right: 1px solid var(--border-color); border-top: 1px solid var(--border-color); 
+            display: flex; flex-direction: column;
+            overflow: hidden; /* Tambahkan ini agar event tidak bocor */
+        }
         .day:nth-child(7n+1) { border-left: none; } .day:nth-child(7n) { border-right: none; }
+        .day.other-month { background-color: #f8f9fa; }
         .day.other-month .day-number { color: #ADB5BD; }
-        .day-number { font-size: 0.9rem; text-align: center; margin-bottom: 6px; width: 28px; height: 28px; line-height: 28px; align-self: flex-end; }
+        .day-number { font-size: 0.9rem; text-align: center; margin-bottom: 6px; width: 28px; height: 28px; line-height: 28px; align-self: flex-end; flex-shrink: 0; }
         .day.today .day-number { background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: 500; }
-        .events-container { flex-grow: 1; position: relative; }
+        .events-container { flex-grow: 1; position: relative; overflow-y: auto; } /* 11. Buat event bisa di-scroll jika terlalu banyak */
         .event {
             font-size: 0.8rem; font-weight: 500; padding: 2px 10px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis;
-            white-space: nowrap; cursor: pointer; transition: filter 0.2s; border: 1px solid rgba(0,0,0,0.05); position: absolute; left: 1px; z-index: 1;
+            white-space: nowrap; cursor: pointer; transition: filter 0.2s; border: 1px solid rgba(0,0,0,0.05); 
+            /* Hapus position:absolute agar event bisa di-scroll */
         }
         .event:hover { filter: brightness(95%); }
         .event.selected { box-shadow: 0 0 0 2px var(--primary-color) inset; z-index: 2; }
-        .event-start { border-radius: 6px 0 0 6px; width: calc(100% + 8px); }
-        .event-middle { border-radius: 0; width: calc(100% + 9px); left: 0; }
-        .event-end { border-radius: 0 6px 6px 0; width: 100%; }
-        .event-single { border-radius: 6px; width: calc(100% - 2px); }
+        
+        /* Hapus style event multi-hari yang 'absolute' */
+        .event-start { border-radius: 6px; }
+        .event-middle { border-radius: 6px; }
+        .event-end { border-radius: 6px; }
+        .event-single { border-radius: 6px; }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; height: auto; overflow: visible; } /* Kembalikan ke auto di HP */
+            .container { flex-grow: 0; overflow: visible; }
+            .calendar-header { padding: 0; }
+            .calendar-header h1 { font-size: 1.5rem; }
+            .main-wrapper { flex-direction: column; overflow: visible; }
+            .sidebar { width: 100%; overflow-y: visible; padding-right: 0; }
+            .day { min-height: 90px; padding: 4px; } /* Kembalikan min-height di HP */
+            .day-name { font-size: 0.7rem; padding: 8px 0; }
+            .day-number { font-size: 0.8rem; width: 24px; height: 24px; line-height: 24px; }
+            .event { font-size: 0.7rem; padding: 1px 5px; }
+            .nav-buttons .nav-btn, .nav-buttons .today-btn { padding: 6px 10px; font-size: 0.8rem; }
+            .nav-buttons .icon-btn { padding: 6px; }
+            
+            /* Kembalikan style multi-hari di HP */
+            .events-container { overflow-y: hidden; }
+            .event { position: absolute; left: 1px; }
+            .event-start { border-radius: 6px 0 0 6px; width: calc(100% + 8px); }
+            .event-middle { border-radius: 0; width: calc(100% + 9px); left: 0; }
+            .event-end { border-radius: 0 6px 6px 0; width: 100%; }
+            .event-single { border-radius: 6px; width: calc(100% - 2px); }
+        }
     </style>
 </head>
 <body>
@@ -65,13 +149,19 @@
                 <h1></h1>
             </div>
             <div class="nav-buttons">
-                <a href="index.html" class="nav-btn">← Homepage</a>
                 <button class="today-btn">Hari Ini</button>
                 <button class="icon-btn" id="prev-month" aria-label="Bulan Sebelumnya"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <button class="icon-btn" id="next-month" aria-label="Bulan Berikutnya"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>
         </header>
         <main class="main-wrapper">
+            <section class="calendar-grid-container">
+                <div class="calendar-header-row">
+                    <div class="day-name">MIN</div><div class="day-name">SEN</div><div class="day-name">SEL</div><div class="day-name">RAB</div><div class="day-name">KAM</div><div class="day-name">JUM</div><div class="day-name">SAB</div>
+                </div>
+                <div class="calendar-grid" id="calendar-body">
+                    </div>
+            </section>
             <aside class="sidebar">
                  <div class="details-section">
                     <h3>Detail Kegiatan</h3>
@@ -86,12 +176,6 @@
                     <div class="legend-item"><div class="legend-color" style="background-color: var(--color-sarana);"></div><span>Sarana Prasarana</span></div>
                 </div>
             </aside>
-            <section class="calendar-grid-container">
-                <div class="calendar-header-row">
-                    <div class="day-name">MIN</div><div class="day-name">SEN</div><div class="day-name">SEL</div><div class="day-name">RAB</div><div class="day-name">KAM</div><div class="day-name">JUM</div><div class="day-name">SAB</div>
-                </div>
-                <div class="calendar-grid" id="calendar-body"></div>
-            </section>
         </main>
     </div>
 
@@ -139,9 +223,21 @@
                 const firstDayOfMonth = new Date(year, month, 1);
                 const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
                 const firstDayIndex = firstDayOfMonth.getDay();
+                
+                // === PERUBAHAN JAVASCRIPT ===
+                const totalCells = (firstDayIndex + lastDateOfMonth) <= 35 ? 35 : 42;
+                
+                // 12. Atur grid rows di kalender body
+                if (window.innerWidth > 768) { // Hanya berlaku di desktop
+                     calendarBody.style.gridTemplateRows = (totalCells === 42) ? 'repeat(6, 1fr)' : 'repeat(5, 1fr)';
+                } else {
+                    calendarBody.style.gridTemplateRows = ''; // Hapus style di HP
+                }
+                // ==========================
+
                 const eventLayout = calculateEventLayout(events, year, month);
                 let dayCounter = 1;
-                const totalCells = (firstDayIndex + lastDateOfMonth) <= 35 ? 35 : 42;
+                
                 for (let i = 0; i < totalCells; i++) {
                     if (i < firstDayIndex || dayCounter > lastDateOfMonth) {
                         const emptyDayEl = document.createElement('div');
@@ -155,19 +251,33 @@
                     const today = new Date();
                     if (dayCounter === today.getDate() && month === today.getMonth() && year === today.getFullYear()) { dayEl.classList.add('today'); }
                     const eventsContainer = document.createElement('div'); eventsContainer.classList.add('events-container');
+                    
                     if (eventLayout[dayCounter]) {
                         eventLayout[dayCounter].forEach(eventMeta => {
                             const event = eventMeta.event; const eventEl = document.createElement('div'); eventEl.classList.add('event');
-                            eventEl.style.top = `${eventMeta.lane * 24}px`;
+                            
+                            // === PERUBAHAN JAVASCRIPT ===
+                            // 13. Hapus style 'top' di desktop, tapi pertahankan di mobile
+                            if (window.innerWidth > 768) {
+                                eventEl.style.position = 'relative'; // Kembalikan ke flow normal
+                            } else {
+                                eventEl.style.top = `${eventMeta.lane * 24}px`;
+                            }
+                            // ==========================
+
                             const colors = divisionColors[event.division]; eventEl.style.backgroundColor = colors.bg; eventEl.style.color = colors.text;
                             if(event.id == selectedEventId) eventEl.classList.add('selected');
+                            
                             const isStartOfWeek = dayDate.getDay() === 0; const isEndOfWeek = dayDate.getDay() === 6;
                             const isActualStart = eventMeta.isStart; const isActualEnd = eventMeta.isEnd;
+                            
                             if (isActualStart || isStartOfWeek) { eventEl.textContent = event.name; } else { eventEl.innerHTML = '&nbsp;'; }
+                            
                             if (isActualStart && isActualEnd) { eventEl.classList.add('event-single'); }
                             else if (isActualStart || isStartOfWeek) { eventEl.classList.add('event-start'); }
                             else if (isActualEnd || isEndOfWeek) { eventEl.classList.add('event-end'); }
                             else { eventEl.classList.add('event-middle'); }
+                            
                             eventEl.addEventListener('click', (e) => { e.stopPropagation(); selectedEventId = event.id; showDetails(event); renderCalendar(); });
                             eventsContainer.appendChild(eventEl);
                         });
@@ -212,6 +322,10 @@
             document.getElementById('prev-month').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
             document.getElementById('next-month').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
             document.querySelector('.today-btn').addEventListener('click', () => { currentDate = new Date(); renderCalendar(); });
+            
+            // Render ulang saat ukuran window berubah (misal dari desktop ke mobile)
+            window.addEventListener('resize', () => renderCalendar());
+            
             window.addEventListener('focus', () => renderCalendar());
             renderCalendar();
         });
