@@ -8,74 +8,170 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         
         :root {
-            --primary-color: #4A90E2; --background-color: #F4F7FC; --card-background: #FFFFFF;
-            --text-color: #333; --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --primary-color: #DC2626; /* Vivid Red */
+            --primary-active-bg: #FEE2E2; /* Light Red */
+            --background-color: #F4F7FC; /* Light Grey */
+            --card-background: #FFFFFF; /* White */
+            --text-color: #333333; /* Dark Grey */
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 2.8rem; color: var(--primary-color); margin-bottom: 10px; }
-        .header p { font-size: 1.1rem; color: #666; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--background-color); 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .portal-container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portal-header {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* === GAYA UNTUK LOGO BARU === */
+        .portal-logo {
+            width: 120px; /* Sesuaikan ukuran jika perlu */
+            height: auto;
+            margin-bottom: 20px; /* Jarak logo ke judul */
+        }
+        /* ============================ */
+
+        .portal-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            background-color: var(--primary-color);
+            padding: 15px 40px;
+            border-radius: 50px;
+            margin-top: 0; /* Dihapus margin atas */
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
+        }
+        .portal-header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .portal-grid {
+            flex: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
         .card {
-            background-color: var(--card-background); border-radius: 12px; box-shadow: var(--shadow);
-            text-decoration: none; color: var(--text-color); padding: 25px; display: flex;
-            flex-direction: column; align-items: center; text-align: center;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            align-items: center;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); }
-        .card-icon { font-size: 3rem; margin-bottom: 15px; }
-        .card h3 { margin: 0 0 10px 0; font-size: 1.25rem; font-weight: 600; }
-        .card p { margin: 0; font-size: 0.9rem; color: #777; flex-grow: 1; }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        .card-icon {
+            font-size: 1.5rem;
+            background-color: var(--primary-active-bg);
+            color: var(--primary-color);
+            border-radius: 8px;
+            padding: 10px;
+            margin-right: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* === Media Query untuk Ponsel === */
+        @media (max-width: 768px) {
+            body { padding: 15px; display: block; }
+            .portal-container {
+                flex-direction: column; /* Tumpuk vertikal */
+            }
+            .portal-header {
+                margin-bottom: 30px;
+            }
+            .portal-logo {
+                width: 100px; /* Logo sedikit lebih kecil di HP */
+            }
+            .portal-header h1 {
+                font-size: 2.5rem;
+            }
+            .portal-grid {
+                grid-template-columns: 1fr; /* Satu kolom di ponsel */
+                gap: 15px;
+            }
+            .card-text {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>DMS - DAFI</h1>
+    <div class="portal-container">
+        <header class="portal-header">
+            <img src="dafi.png" alt="Logo SMP DAFI" class="portal-logo">
+            
+            <h1>DMS DAFI</h1>
             <p>Document Management System - SMP DAFI</p>
         </header>
 
-        <main class="card-grid">
+        <main class="portal-grid">
             <a href="kalender.html" class="card">
-                <div class="card-icon">🗓️</div>
-                <h3>Kalender Agenda</h3>
-                <p>Lihat semua jadwal kegiatan bulanan sekolah dari data terpusat.</p>
+                <span class="card-icon">🗓️</span>
+                <span class="card-text">Kalender Agenda</span>
             </a>
             <a href="prestasi-guru.html" class="card">
-                <div class="card-icon">🏆</div>
-                <h3>Prestasi Guru</h3>
-                <p>Arsip pencapaian dan prestasi yang diraih oleh para guru.</p>
+                <span class="card-icon">🏆</span>
+                <span class="card-text">Prestasi Guru</span>
             </a>
             <a href="sop.html" class="card">
-                <div class="card-icon">📜</div>
-                <h3>Kumpulan SOP</h3>
-                <p>Dokumen Standar Operasional Prosedur (SOP) sekolah.</p>
+                <span class="card-icon">📜</span>
+                <span class="card-text">Kumpulan SOP</span>
             </a>
             <a href="perangkat-ajar.html" class="card">
-                <div class="card-icon">📚</div>
-                <h3>Perangkat Mengajar</h3>
-                <p>Kumpulan materi dan perangkat pendukung proses belajar mengajar.</p>
+                <span class="card-icon">📚</span>
+                <span class="card-text">Perangkat Mengajar</span>
             </a>
             <a href="rekap-prestasi.html" class="card">
-                <div class="card-icon">🏅</div>
-                <h3>Rekap Prestasi Siswa</h3>
-                <p>Catatan prestasi akademik dan non-akademik per siswa.</p>
+                <span class="card-icon">🏅</span>
+                <span class="card-text">Rekap Prestasi Siswa</span>
             </a>
             <a href="rekap-permasalahan.html" class="card">
-                <div class="card-icon">⚠️</div>
-                <h3>Rekap Permasalahan Siswa</h3>
-                <p>Catatan dan tindak lanjut permasalahan yang dihadapi siswa.</p>
+                <span class="card-icon">⚠️</span>
+                <span class="card-text">Rekap Permasalahan Siswa</span>
             </a>
             <a href="jadwal-konseling.html" class="card">
-                <div class="card-icon">💬</div>
-                <h3>Jadwal Konseling</h3>
-                <p>Jadwal dan hasil sesi konseling bersama siswa.</p>
+                <span class="card-icon">💬</span>
+                <span class="card-text">Jadwal Konseling</span>
             </a>
             <a href="pemetaan-siswa.html" class="card">
-                <div class="card-icon">🗺️</div>
-                <h3>Pemetaan Siswa</h3>
-                <p>Analisis dan pemetaan potensi serta kebutuhan siswa.</p>
+                <span class="card-icon">📈</span>
+                <span class="card-text">Pemetaan Siswa</span>
             </a>
         </main>
     </div>
