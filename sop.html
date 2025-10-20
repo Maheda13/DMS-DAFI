@@ -7,53 +7,92 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
         :root {
-            --primary-color: #4A90E2; --background-color: #F4F7FC; --border-color: #DEE2E6;
+            --primary-color: #DC2626; --primary-hover: #B91C1C; --primary-active-bg: #FEE2E2;
+            --background-color: #F4F7FC; --border-color: #DEE2E6;
             --text-color: #333; --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .header {
             background-color: #fff; padding: 15px 30px; border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 20px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; box-shadow: var(--shadow);
         }
+        .header-left { display: flex; align-items: center; gap: 20px; }
         .header h1 { color: var(--primary-color); font-size: 1.5rem; margin: 0; }
-        .back-link { text-decoration: none; color: var(--text-color); font-weight: 500; transition: color 0.2s; }
-        .back-link:hover { color: var(--primary-color); }
+        
+        /* === PERUBAHAN CSS DI SINI === */
+        .header-logo { height: 40px; width: 40px; object-fit: contain; }
+        .logo-link-desktop { display: block; } /* Tampil di desktop */
+        .back-link-mobile { display: none; } /* Sembunyi di desktop */
+        /* ============================ */
+        
+        #toggle-nav {
+            background: none; border: 1px solid var(--border-color); border-radius: 8px; padding: 5px 10px;
+            cursor: pointer; font-weight: 500; font-family: 'Poppins'; transition: all 0.2s;
+        }
+        #toggle-nav:hover { background-color: #f8f9fa; }
         .main-container { display: flex; flex-grow: 1; overflow: hidden; }
         .sidebar {
             width: 350px; background-color: #fff; border-right: 1px solid var(--border-color);
-            display: flex; flex-direction: column; flex-shrink: 0;
+            display: flex; flex-direction: column; flex-shrink: 0; transition: width 0.3s ease, padding 0.3s ease;
         }
         .search-container { padding: 15px; border-bottom: 1px solid var(--border-color); }
-        #search-input {
-            width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);
-            font-size: 1rem; box-sizing: border-box;
-        }
-        .doc-list-container { list-style: none; margin: 0; padding: 10px 0; overflow-y: auto; }
-        .doc-list-container li {
-            padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s; font-weight: 500;
-        }
+        #search-input { width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; box-sizing: border-box; }
+        .doc-list-container { list-style: none; margin: 0; padding: 10px 0; overflow-y: auto; flex-grow: 1; }
+        .doc-list-container li { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s; font-weight: 500; }
         .doc-list-container li:hover { background-color: #f8f9fa; }
-        .doc-list-container li.active { background-color: #e9f2ff; color: var(--primary-color); }
+        .doc-list-container li.active { background-color: var(--primary-active-bg); color: var(--primary-color); }
         .viewer-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; background-color: #e9ecef; }
-        #pdf-viewer { width: 100%; height: 100%; border: none; }
-        .placeholder { text-align: center; color: #6c757d; }
+        #pdf-viewer { width: 100%; height: 100%; border: none; display: none; }
+        .placeholder { text-align: center; color: #6c757d; padding: 20px; }
         .placeholder-icon { font-size: 4rem; margin-bottom: 10px; }
+        .loading { font-weight: 500; color: #777; text-align: center; padding: 20px; }
+        .sidebar.collapsed { width: 0; padding: 0; border-right: none; overflow: hidden; }
+        .sidebar.collapsed .search-container, .sidebar.collapsed .doc-list-container { display: none; }
+
+        @media (max-width: 768px) {
+            body { overflow: hidden; }
+            .header { padding: 15px; }
+            .header h1 { font-size: 1.2rem; }
+            #toggle-nav { display: none; }
+            
+            /* === PERUBAHAN CSS DI SINI === */
+            .logo-link-desktop { display: none; } /* Sembunyikan logo di HP */
+            .back-link-mobile { 
+                display: block; /* Tampilkan link teks di HP */
+                text-decoration: none; color: var(--text-color); 
+                font-weight: 500; transition: color 0.2s; white-space: nowrap;
+            }
+            .back-link-mobile:hover { color: var(--primary-color); }
+            /* ============================ */
+            
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; height: 100%; }
+            .viewer-container { height: 100%; }
+            .main-container:not(.view-mode) .viewer-container { display: none; }
+            .main-container.view-mode .sidebar { display: none; }
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="back-link">← Homepage</a>
-        <h1>Kumpulan SOP</h1>
+        <div class="header-left">
+            <a href="index.html" class="logo-link-desktop">
+                <img src="dafi.png" alt="Homepage" class="header-logo">
+            </a>
+            <a href="index.html" class="back-link-mobile" id="back-link">← Homepage</a>
+            <h1>Kumpulan SOP</h1>
+        </div>
+        <button id="toggle-nav">Sembunyikan Menu</button>
     </header>
 
-    <main class="main-container">
-        <aside class="sidebar">
+    <main class="main-container" id="main-container">
+        <aside class="sidebar" id="sidebar">
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Cari dokumen...">
             </div>
             <ul class="doc-list-container" id="doc-list">
-                </ul>
+                <li class="loading">Memuat daftar dokumen...</li>
+            </ul>
         </aside>
 
         <section class="viewer-container" id="viewer-container">
@@ -67,37 +106,55 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ==========================================================
-            // === 1. MASUKKAN DATA DOKUMEN ANDA DI BAGIAN INI ===
-            // ==========================================================
-            const documents = [
-                {
-                    title: "SOP Penerimaan Siswa Baru",
-                    embedLink: "https://docs.google.com/document/d/1FH-FcqoA9hwDXytBpq-dauB99xbgs92r/preview",
-                    tags: ["ppdb", "siswa baru", "pendaftaran", "kesiswaan"]
-                },
-                {
-                    title: "SOP Kegiatan Belajar Mengajar",
-                    embedLink: "https://drive.google.com/file/d/1_p-A9COc9xKOTcSlvAYsqboI_YyTI2B6/preview",
-                    tags: ["kbm", "kurikulum", "akademik", "guru"]
-                },
-                {
-                    title: "SOP Penggunaan Laboratorium",
-                    embedLink: "LINK_EMBED_ANDA_DI_SINI_3",
-                    tags: ["lab", "sarana", "praktikum"]
-                },
-                // Tambahkan dokumen lainnya di sini
-            ];
-            // ==========================================================
+        // ... JavaScript Anda tetap SAMA ...
+        // Tidak ada perubahan di JavaScript, ID "back-link" masih
+        // merujuk ke link teks yang tampil di mode mobile.
+        document.addEventListener('DOMContentLoaded', async function() {
+            async function getSopData() {
+                const sopSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJrQRg84GOWbqBd4DgwxJfcQZZUJ3-uvyGqnv9vVaRDXJ2jId9lPdlrmnG-rQ0xyWF3ms3liItP23M/pub?gid=213658487&single=true&output=csv';
 
+                try {
+                    const response = await fetch(sopSheetURL);
+                    if (!response.ok) throw new Error('Gagal mengambil data SOP.');
+                    const csvText = await response.text();
+                    const lines = csvText.split(/\r\n|\n/);
+                    const headers = lines[0].split(',');
+                    const titleIndex = headers.indexOf('title');
+                    const fileIdIndex = headers.indexOf('fileId');
+                    const tagsIndex = headers.indexOf('tags');
+                    if (titleIndex === -1 || fileIdIndex === -1 || tagsIndex === -1) {
+                        console.error("Header kolom tidak sesuai. Pastikan ada 'title', 'fileId', dan 'tags'.");
+                        return [{ title: "Error: Format spreadsheet salah.", fileId: "", tags: ["error"] }];
+                    }
+                    return lines.slice(1).map(line => {
+                        if (!line) return null;
+                        const data = line.split(',');
+                        const fileId = data[fileIdIndex].trim();
+                        return {
+                            title: data[titleIndex].trim(),
+                            fileId: fileId,
+                            embedLink: `https://drive.google.com/file/d/${fileId}/preview`,
+                            tags: data[tagsIndex].trim().split('|')
+                        };
+                    }).filter(Boolean);
+                } catch (error) {
+                    console.error("Error:", error);
+                    return [{ title: `Error: ${error.message}`, fileId: "", tags: ["error"] }];
+                }
+            }
+            
             const searchInput = document.getElementById('search-input');
             const docList = document.getElementById('doc-list');
             const pdfViewer = document.getElementById('pdf-viewer');
             const viewerPlaceholder = document.getElementById('viewer-placeholder');
+            const mainContainer = document.getElementById('main-container');
+            const sidebar = document.getElementById('sidebar');
+            const toggleNavBtn = document.getElementById('toggle-nav');
+            const backLink = document.getElementById('back-link'); // <-- Ini sekarang merujuk ke .back-link-mobile
+            const documents = await getSopData();
 
             function renderList(docsToRender) {
-                docList.innerHTML = ''; // Kosongkan daftar
+                docList.innerHTML = ''; 
                 if (docsToRender.length === 0) {
                     docList.innerHTML = '<li style="text-align:center; color:#777; cursor:default;">Dokumen tidak ditemukan.</li>';
                     return;
@@ -106,30 +163,46 @@
                     const listItem = document.createElement('li');
                     listItem.textContent = doc.title;
                     listItem.dataset.link = doc.embedLink;
+                    listItem.dataset.fileid = doc.fileId;
                     docList.appendChild(listItem);
                 });
             }
-
-            // Tampilkan daftar awal
             renderList(documents);
 
-            // Fungsi untuk menampilkan PDF
             docList.addEventListener('click', function(e) {
                 if (e.target && e.target.nodeName === 'LI' && e.target.dataset.link) {
                     const link = e.target.dataset.link;
-                    
-                    // Sembunyikan placeholder, tampilkan iframe
+                    if (!e.target.dataset.fileid || e.target.dataset.fileid === "") {
+                        alert("Dokumen ini tidak valid atau terjadi error pada data.");
+                        return;
+                    }
                     viewerPlaceholder.style.display = 'none';
                     pdfViewer.style.display = 'block';
                     pdfViewer.src = link;
-
-                    // Tandai item yang aktif
                     document.querySelectorAll('.doc-list-container li').forEach(li => li.classList.remove('active'));
                     e.target.classList.add('active');
+                    if (window.innerWidth <= 768) {
+                        mainContainer.classList.add('view-mode');
+                        backLink.textContent = '← Kembali ke Daftar';
+                        backLink.href = '#';
+                    }
                 }
             });
 
-            // Fungsi untuk pencarian
+            backLink.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768 && mainContainer.classList.contains('view-mode')) {
+                    e.preventDefault();
+                    mainContainer.classList.remove('view-mode');
+                    backLink.textContent = '← Homepage';
+                    backLink.href = 'index.html';
+                }
+            });
+
+            toggleNavBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                toggleNavBtn.textContent = sidebar.classList.contains('collapsed') ? 'Tampilkan Menu' : 'Sembunyikan Menu';
+            });
+
             searchInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value.toLowerCase();
                 const filteredDocs = documents.filter(doc => {
